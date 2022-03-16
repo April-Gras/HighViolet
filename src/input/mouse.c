@@ -1,5 +1,9 @@
 #include "hv.h"
 
+void handle_mouse_whell_event(MOUSE *mouse, SDL_MouseWheelEvent event) {
+  mouse->scroll_y = event.y;
+}
+
 void handle_mouse_motion_event(MOUSE *mouse, SDL_MouseMotionEvent event) {
   mouse->x = event.x;
   mouse->y = event.y;
@@ -29,6 +33,7 @@ MOUSE *new_mouse() {
   mouse->right_click = false;
   mouse->x = 0;
   mouse->y = 0;
+  mouse->scroll_y = 0;
   return mouse;
 }
 

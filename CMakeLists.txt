@@ -19,5 +19,8 @@ add_executable(hv
     src/state/memory.c
     src/engine_timers/memory.c
     src/input/mouse.c
+    src/draw/hexagon.c
+    src/camera/memory.c
+    src/camera/manipulate.c
 )
 target_link_libraries(hv ${SDL2_LIBRARIES} m)

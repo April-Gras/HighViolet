@@ -1,8 +1,5 @@
 #include "hv.h"
 
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
-
 void destroy_state(STATE *state) {
   if (state->map)
     destroy_tile_list(state->map);
@@ -10,6 +7,13 @@ void destroy_state(STATE *state) {
     destroy_mouse(state->mouse);
   if (state->timers)
     destroy_engine_timers(state->timers);
+  if (state->renderer)
+    SDL_DestroyRenderer(state->renderer);
+  if (state->window)
+    SDL_DestroyWindow(state->window);
+  if (state->camera)
+    destroy_camera(state->camera);
+  SDL_Quit();
   free(state);
 }
 
@@ -21,7 +25,11 @@ void gracefully_exit_and_destroy_state(STATE *state, int error_number) {
 void init_SDL_systems(STATE *s) {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
-    gracefully_exit_and_destroy_state(s, SDL_sytems_init_failure);
+    gracefully_exit_and_destroy_state(s, HV_SDL_sytems_init_failure);
+  }
+  if (SDL_SetRelativeMouseMode(SDL_TRUE)) {
+    fprintf(stderr, "mouse trap failed :< %s\n", SDL_GetError());
+    gracefully_exit_and_destroy_state(s, HV_SDL_mouse_trap_failed);
   }
 }
 
@@ -31,30 +39,32 @@ SDL_Window *new_SDL_window(STATE *s) {
                                         SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if (window == NULL) {
     fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-    gracefully_exit_and_destroy_state(s, SDL_window_init_failure);
+    gracefully_exit_and_destroy_state(s, HV_SDL_window_init_failure);
   }
   return window;
 }
 
-SDL_Surface *new_SDL_surface(STATE *s) {
-  SDL_Surface *surface = SDL_GetWindowSurface(s->window);
+SDL_Renderer *new_SDL_renderer(STATE *s) {
+  SDL_Renderer *renderer =
+      SDL_CreateRenderer(s->window, -1, SDL_RENDERER_ACCELERATED);
 
-  if (surface == NULL) {
-    fprintf(stderr, "could not create windows surface: %s\n", SDL_GetError());
-    gracefully_exit_and_destroy_state(s, SDL_surface_init_failure);
+  if (renderer == NULL) {
+    fprintf(stderr, "could not create SDL renderer: %s\n", SDL_GetError());
+    gracefully_exit_and_destroy_state(s, HV_SDL_rendererr_init_failure);
   }
-  return surface;
+  return renderer;
 }
 
 STATE *new_state() {
   STATE *state = (STATE *)malloc(sizeof(STATE));
 
   state->window = NULL;
-  state->surface = NULL;
   state->map = NULL;
   state->mouse = NULL;
   state->timers = NULL;
+  state->renderer = NULL;
   state->is_still_running = false;
+  state->camera = NULL;
   return state;
 }
 
@@ -62,11 +72,15 @@ STATE *init_state() {
   STATE *state = new_state();
   TILE_LIST *map = NULL;
 
+  // Initialize internal systems
   generate_tile_list_map(&map, MAP_WIDTH, MAP_HEIGHT);
   state->map = map;
-  state->window = new_SDL_window(state);
-  state->surface = new_SDL_surface(state);
   state->timers = new_engine_timers();
+  state->camera = new_camera();
   state->mouse = new_mouse();
+
+  // Initialize SDL systems
+  state->window = new_SDL_window(state);
+  state->renderer = new_SDL_renderer(state);
   return state;
 }

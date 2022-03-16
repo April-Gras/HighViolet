@@ -18,7 +18,18 @@ void handle_SDL_event(SDL_Event *event, STATE *state) {
   case SDL_MOUSEBUTTONUP:
     handle_mouse_button_event(state->mouse, event->button);
     break;
+  case SDL_MOUSEWHEEL:
+    handle_mouse_whell_event(state->mouse, event->wheel);
   }
+}
+
+void draw(STATE *state) {
+  SDL_SetRenderDrawColor(state->renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_RenderClear(state->renderer);
+  SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+  int value = state->camera->z;
+  draw_map_from_tile_list(value, 50, 50, state);
+  SDL_RenderPresent(state->renderer);
 }
 
 void game_loop(STATE *state) {
@@ -28,22 +39,14 @@ void game_loop(STATE *state) {
   while (state->is_still_running) {
     SDL_Event event;
 
+    // Reset mouse scroll
+    state->mouse->scroll_y = 0;
     while (SDL_PollEvent(&event)) { // poll until all events are handled!
       handle_SDL_event(&event, state);
     }
-    SDL_FillRect(state->surface, NULL,
-                 SDL_MapRGB(state->surface->format, 0x00, 0x00, 0x00));
-    SDL_Rect rect;
-    rect.w = 64;
-    rect.h = 64;
-    rect.x = state->mouse->x;
-    rect.y = state->mouse->y;
-    SDL_FillRect(state->surface, &rect,
-                 SDL_MapRGB(state->surface->format,
-                            state->mouse->left_click ? 0xFF : 0x25,
-                            state->mouse->middle_click ? 0xFF : 0x25,
-                            state->mouse->right_click ? 0xFF : 0x25));
-    SDL_UpdateWindowSurface(state->window);
+    printf("%i\n", state->mouse->scroll_y);
+    change_camera_zoom(state->mouse->scroll_y, state->camera);
+    draw(state);
   }
 }
 
