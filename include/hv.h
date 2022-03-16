@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
+#define MAP_WIDTH 300
+#define MAP_HEIGHT MAP_WIDTH / 4
 
 typedef enum E_HIGH_VIOLET_ERROR {
   HV_SDL_surface_init_failure = 0,

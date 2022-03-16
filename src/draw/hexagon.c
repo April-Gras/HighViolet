@@ -18,7 +18,6 @@ void draw_map_from_tile_list(int radius, int start_x, int start_y,
                              STATE *state) {
   TILE_LIST *swap = state->map;
   int diameter = radius * 2;
-  int map_pixel_wdth = MAP_WIDTH * diameter;
   int row = 0;
   int col = 0;
   int row_y = start_y;
@@ -30,13 +29,13 @@ void draw_map_from_tile_list(int radius, int start_x, int start_y,
     swap = swap->next;
     x += diameter;
     y += col % 2 ? -radius : radius;
-    if (x >= map_pixel_wdth) {
+    if (col >= MAP_WIDTH / 2) {
       x = start_x;
       row_y += diameter;
       y = row_y;
       col = 0;
       row++;
-    }
-    col++;
+    } else
+      col++;
   }
 }

@@ -5,7 +5,7 @@ CAMERA *new_camera() {
 
   camera->x = 0;
   camera->y = 0;
-  camera->z = 0;
+  camera->z = 60;
   return camera;
 }
 

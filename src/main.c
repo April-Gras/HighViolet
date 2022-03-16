@@ -28,7 +28,7 @@ void draw(STATE *state) {
   SDL_RenderClear(state->renderer);
   SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   int value = state->camera->z;
-  draw_map_from_tile_list(value, 50, 50, state);
+  draw_map_from_tile_list(value, value, value, state);
   SDL_RenderPresent(state->renderer);
 }
 

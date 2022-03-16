@@ -47,17 +47,17 @@ void link_cell(int x, int y, int width, int height, TILE_LIST *current_tile,
 
 void generate_tile_list_map(TILE_LIST **start, int width, int height) {
   int totalMembers = width * height;
-  TILE_LIST *swap;
+  // TILE_LIST *swap;
 
   for (int i = 0; i < totalMembers; i++)
     tile_list_push(start);
-  swap = *start;
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      link_cell(x, y, width, height, swap, *start);
-      swap = swap->next;
-    }
-  }
+  // swap = *start;
+  // for (int y = 0; y < height; y++) {
+  //   for (int x = 0; x < width; x++) {
+  //     link_cell(x, y, width, height, swap, *start);
+  //     swap = swap->next;
+  //   }
+  // }
 }
 
 void destroy_tile_list_map() {}
