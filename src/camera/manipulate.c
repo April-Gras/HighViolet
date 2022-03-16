@@ -8,3 +8,8 @@ void change_camera_zoom(int zoom_addition, CAMERA *camera) {
   else
     camera->z = result;
 }
+
+void change_camera_position(int x, int y, CAMERA *camera) {
+  camera->x += x;
+  camera->y += y;
+}

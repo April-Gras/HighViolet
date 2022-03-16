@@ -28,8 +28,25 @@ void draw(STATE *state) {
   SDL_RenderClear(state->renderer);
   SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   int value = state->camera->z;
-  draw_map_from_tile_list(value, value, value, state);
+  draw_map_from_tile_list(value, value + state->camera->x,
+                          value + state->camera->y, state);
   SDL_RenderPresent(state->renderer);
+}
+
+#define CAMERA_PADDING 50
+void handle_camera(STATE *state) {
+  int x = state->mouse->x;
+  int y = state->mouse->y;
+
+  if (x < CAMERA_PADDING)
+    change_camera_position(1, 0, state->camera);
+  if (y < CAMERA_PADDING)
+    change_camera_position(0, 1, state->camera);
+  if (x > SCREEN_WIDTH - CAMERA_PADDING)
+    change_camera_position(-1, 0, state->camera);
+  if (y > SCREEN_HEIGHT - CAMERA_PADDING)
+    change_camera_position(0, -1, state->camera);
+  change_camera_zoom(state->mouse->scroll_y, state->camera);
 }
 
 void game_loop(STATE *state) {
@@ -41,11 +58,16 @@ void game_loop(STATE *state) {
 
     // Reset mouse scroll
     state->mouse->scroll_y = 0;
-    while (SDL_PollEvent(&event)) { // poll until all events are handled!
+
+    // poll until all events are handled!
+    while (SDL_PollEvent(&event)) {
       handle_SDL_event(&event, state);
     }
-    printf("%i\n", state->mouse->scroll_y);
-    change_camera_zoom(state->mouse->scroll_y, state->camera);
+
+    // Logic //
+    handle_camera(state);
+
+    // Draw //
     draw(state);
   }
 }

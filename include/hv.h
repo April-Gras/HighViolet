@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAP_WIDTH 300
+#define MAP_WIDTH 100
 #define MAP_HEIGHT MAP_WIDTH / 4
 
 typedef enum E_HIGH_VIOLET_ERROR {
@@ -73,6 +73,7 @@ CAMERA *new_camera();
 void destroy_camera(CAMERA *camera);
 // Manipulate
 void change_camera_zoom(int zoom_addition, CAMERA *camera);
+void change_camera_position(int x, int y, CAMERA *camera);
 
 typedef struct S_STATE {
   TILE_LIST *map;
