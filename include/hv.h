@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAP_WIDTH 100
-#define MAP_HEIGHT MAP_WIDTH / 4
+#define MAP_WIDTH 8
+#define MAP_HEIGHT 8
 
 typedef enum E_HIGH_VIOLET_ERROR {
   HV_SDL_surface_init_failure = 0,
@@ -22,16 +22,30 @@ typedef enum E_HIGH_VIOLET_ERROR {
   HV_SDL_mouse_trap_failed = 4,
 } HIGHT_VIOLET_ERR_NO;
 
+typedef struct S_CUBE_COORD {
+  int q;
+  int r;
+  int s;
+} CUBE_COORD;
+
+typedef struct S_AXIAL_COORD {
+  int q;
+  int r;
+} AXIAL_COORD;
+
 typedef struct S_TILE_LIST {
+  // state
+  bool is_hovered;
+  bool is_focused;
+
+  // Classic linking
   struct S_TILE_LIST *prev;
   struct S_TILE_LIST *next;
 
-  struct S_TILE_LIST *top;
-  struct S_TILE_LIST *top_right;
-  struct S_TILE_LIST *bottom_right;
-  struct S_TILE_LIST *bottom;
-  struct S_TILE_LIST *bottom_left;
-  struct S_TILE_LIST *top_left;
+  // Coord systems
+  AXIAL_COORD axial_coord;
+  CUBE_COORD cube_coord;
+
 } TILE_LIST;
 // Memory
 void tile_list_push(TILE_LIST **tile_list);

@@ -16,6 +16,7 @@ add_executable(hv
   src/main.c
     src/tile_list/memory.c
     src/tile_list/generation.c
+    src/tile_list/logic_tick_update.c
     src/state/memory.c
     src/engine_timers/memory.c
     src/input/mouse.c

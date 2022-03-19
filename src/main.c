@@ -56,10 +56,10 @@ void game_loop(STATE *state) {
   while (state->is_still_running) {
     SDL_Event event;
 
-    // Reset mouse scroll
+    // Reset mouse scroll //
     state->mouse->scroll_y = 0;
 
-    // poll until all events are handled!
+    // poll until all events are handled! //
     while (SDL_PollEvent(&event)) {
       handle_SDL_event(&event, state);
     }
