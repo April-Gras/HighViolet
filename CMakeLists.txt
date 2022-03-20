@@ -14,8 +14,8 @@ include_directories(${SDL2_INCLUDE_DIRS} include)
 
 add_executable(hv
   src/main.c
+  src/utils.c
     src/tile_list/memory.c
-    src/tile_list/generation.c
     src/tile_list/logic_tick_update.c
     src/state/memory.c
     src/engine_timers/memory.c

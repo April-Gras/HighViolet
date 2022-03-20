@@ -11,9 +11,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAP_WIDTH 8
-#define MAP_HEIGHT 8
+#define MAP_SIZE 3
+#define R_LENGTH MAP_SIZE * 2
 
+int imin(int a, int b);
+int imax(int a, int b);
 typedef enum E_HIGH_VIOLET_ERROR {
   HV_SDL_surface_init_failure = 0,
   HV_SDL_window_init_failure = 1,
@@ -32,26 +34,20 @@ typedef struct S_AXIAL_COORD {
   int q;
   int r;
 } AXIAL_COORD;
-
-typedef struct S_TILE_LIST {
-  // state
+typedef struct S_TILE {
   bool is_hovered;
   bool is_focused;
 
-  // Classic linking
-  struct S_TILE_LIST *prev;
-  struct S_TILE_LIST *next;
-
-  // Coord systems
   AXIAL_COORD axial_coord;
   CUBE_COORD cube_coord;
-
-} TILE_LIST;
+} TILE;
 // Memory
-void tile_list_push(TILE_LIST **tile_list);
-void destroy_tile_list(TILE_LIST *start);
+TILE **new_map();
+TILE new_map_tile(int q, int r);
+void destroy_tile_map(TILE **map);
+
 // Generation
-void generate_tile_list_map(TILE_LIST **start, int width, int height);
+TILE **generate_tile_list_map();
 
 typedef struct S_ENGINE_TIMERS {
   int last_frame_time_stamp;
@@ -90,7 +86,7 @@ void change_camera_zoom(int zoom_addition, CAMERA *camera);
 void change_camera_position(int x, int y, CAMERA *camera);
 
 typedef struct S_STATE {
-  TILE_LIST *map;
+  TILE **map;
   SDL_Window *window;
   CAMERA *camera;
   SDL_Renderer *renderer;

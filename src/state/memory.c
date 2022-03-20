@@ -2,7 +2,7 @@
 
 void destroy_state(STATE *state) {
   if (state->map)
-    destroy_tile_list(state->map);
+    destroy_tile_map(state->map);
   if (state->mouse)
     destroy_mouse(state->mouse);
   if (state->timers)
@@ -70,11 +70,9 @@ STATE *new_state() {
 
 STATE *init_state() {
   STATE *state = new_state();
-  TILE_LIST *map = NULL;
 
   // Initialize internal systems
-  generate_tile_list_map(&map, MAP_WIDTH, MAP_HEIGHT);
-  state->map = map;
+  state->map = new_map();
   state->timers = new_engine_timers();
   state->camera = new_camera();
   state->mouse = new_mouse();
