@@ -45,6 +45,7 @@ typedef struct S_TILE {
 TILE **new_map();
 TILE new_map_tile(int q, int r);
 void destroy_tile_map(TILE **map);
+int get_map_row_size(int r);
 
 // Generation
 TILE **generate_tile_list_map();

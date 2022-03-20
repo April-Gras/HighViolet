@@ -1,6 +1,6 @@
 #include "hv.h"
 
-int get_row_size(int r) { return (2 * MAP_SIZE) + 1 - abs(MAP_SIZE - r); }
+int get_map_row_size(int r) { return (2 * MAP_SIZE) + 1 - abs(MAP_SIZE - r); }
 
 TILE new_map_tile(int q, int r) {
   int s = -q - r;
@@ -9,13 +9,13 @@ TILE new_map_tile(int q, int r) {
 }
 
 TILE **new_map() {
-  int totalMembers = MAP_SIZE * 2;
-  TILE **map = (TILE **)malloc(sizeof(TILE *) * (totalMembers + 1));
+  int totla_member = R_LENGTH;
+  TILE **map = (TILE **)malloc(sizeof(TILE *) * (totla_member + 1));
   int r = 0;
 
-  while (r <= totalMembers) {
+  while (r <= totla_member) {
     int q = 0;
-    int row_size = get_row_size(r);
+    int row_size = get_map_row_size(r);
 
     map[r] = (TILE *)malloc(sizeof(TILE) * row_size);
     while (q < row_size) {
@@ -28,10 +28,10 @@ TILE **new_map() {
 }
 
 void destroy_tile_map(TILE **map) {
-  int totalMembers = MAP_SIZE * 2;
+  int totla_member = MAP_SIZE * 2;
   int r = 0;
 
-  while (r <= totalMembers) {
+  while (r <= totla_member) {
     free(map[r]);
     r++;
   }
