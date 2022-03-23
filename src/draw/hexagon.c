@@ -28,11 +28,20 @@ void draw_map_from_tile_list(int radius, int start_x, int start_y,
     int x_row_offset = (horizontal_spacing / 2) * r;
 
     while (q < row_size) {
+      bool is_hovered = state->map[r][q].is_hovered;
       int x = state->map[r][q].axial_coord.q * horizontal_spacing + start_x +
               x_row_offset;
       int y = state->map[r][q].axial_coord.r * vertical_spacing + start_y;
 
+      // TODO clean
+      if (is_hovered)
+        SDL_SetRenderDrawColor(state->renderer, 0x00, 0xFF, 0x00, 0xFF);
       draw_hexagon(radius, x, y, state);
+      // TODO clean
+      if (is_hovered)
+        SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+      // TODO clean
+      state->map[r][q].is_hovered = false;
       q++;
     }
     r++;

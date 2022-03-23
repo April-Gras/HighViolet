@@ -37,4 +37,13 @@ MOUSE *new_mouse() {
   return mouse;
 }
 
+AXIAL_COORD mouse_to_hexa_axial_coord(MOUSE *mouse, double radius) {
+  double x = mouse->x;
+  double y = mouse->y;
+  double q = ((sqrt(3.0) / 3.0 * x) - (1.0 / 3.0) * y) / radius;
+  double r = ((2.0 / 3.0) * y) / radius;
+
+  return axial_round(q, r);
+}
+
 void destroy_mouse(MOUSE *mouse) { free(mouse); }

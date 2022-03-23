@@ -28,25 +28,8 @@ void draw(STATE *state) {
   SDL_RenderClear(state->renderer);
   SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   int value = state->camera->z;
-  draw_map_from_tile_list(value, value + state->camera->x,
-                          value + state->camera->y, state);
+  draw_map_from_tile_list(value, 0, 0, state);
   SDL_RenderPresent(state->renderer);
-}
-
-#define CAMERA_PADDING 50
-void handle_camera(STATE *state) {
-  int x = state->mouse->x;
-  int y = state->mouse->y;
-
-  if (x < CAMERA_PADDING)
-    change_camera_position(1, 0, state->camera);
-  if (y < CAMERA_PADDING)
-    change_camera_position(0, 1, state->camera);
-  if (x > SCREEN_WIDTH - CAMERA_PADDING)
-    change_camera_position(-1, 0, state->camera);
-  if (y > SCREEN_HEIGHT - CAMERA_PADDING)
-    change_camera_position(0, -1, state->camera);
-  change_camera_zoom(state->mouse->scroll_y, state->camera);
 }
 
 void game_loop(STATE *state) {
@@ -65,7 +48,8 @@ void game_loop(STATE *state) {
     }
 
     // Logic //
-    handle_camera(state);
+    handle_camera_tick(state);
+    handle_input_mouse_tick(state);
 
     // Draw //
     draw(state);

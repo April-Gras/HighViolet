@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL.h>
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,11 @@ typedef struct S_AXIAL_COORD {
   int q;
   int r;
 } AXIAL_COORD;
+CUBE_COORD cube_round(double fract_q, double fract_r, double fract_s);
+AXIAL_COORD cube_to_axial(CUBE_COORD coord);
+CUBE_COORD axial_to_cube(AXIAL_COORD coord);
+AXIAL_COORD axial_round(double r, double q);
+bool axial_coord_equals(AXIAL_COORD a, AXIAL_COORD b);
 typedef struct S_TILE {
   bool is_hovered;
   bool is_focused;
@@ -46,6 +52,7 @@ TILE **new_map();
 TILE new_map_tile(int q, int r);
 void destroy_tile_map(TILE **map);
 int get_map_row_size(int r);
+int get_q_index_from_axial_coord(AXIAL_COORD coord);
 
 // Generation
 TILE **generate_tile_list_map();
@@ -73,6 +80,7 @@ void destroy_mouse();
 void handle_mouse_whell_event(MOUSE *mouse, SDL_MouseWheelEvent event);
 void handle_mouse_motion_event(MOUSE *mouse, SDL_MouseMotionEvent event);
 void handle_mouse_button_event(MOUSE *mouse, SDL_MouseButtonEvent event);
+AXIAL_COORD mouse_to_hexa_axial_coord(MOUSE *mouse, double radius);
 
 typedef struct S_CAMERA {
   int x;
@@ -99,6 +107,15 @@ typedef struct S_STATE {
 STATE *init_state();
 void destroy_state(STATE *state);
 
-// Draw calls
+// DRAW CALLS
+// hexagons
 void draw_hexagon(int radius, int x, int y, STATE *state);
 void draw_map_from_tile_list(int radius, int x, int y, STATE *state);
+
+// --- //
+
+// TICK CALLS
+// input/mouse
+void handle_input_mouse_tick(STATE *state);
+// camera
+void handle_camera_tick(STATE *state);

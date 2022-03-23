@@ -19,12 +19,17 @@ TILE **new_map() {
 
     map[r] = (TILE *)malloc(sizeof(TILE) * row_size);
     while (q < row_size) {
+      // q = -(imax(0, MAP_SIZE) - r) is inverse
       map[r][q] = new_map_tile(q + imax(0, MAP_SIZE - r), r);
       q++;
     }
     r++;
   }
   return map;
+}
+
+int get_q_index_from_axial_coord(AXIAL_COORD coord) {
+  return -(imax(0, MAP_SIZE) - coord.r);
 }
 
 void destroy_tile_map(TILE **map) {
