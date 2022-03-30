@@ -33,3 +33,13 @@ AXIAL_COORD axial_round(double q, double r) {
 bool axial_coord_equals(AXIAL_COORD a, AXIAL_COORD b) {
   return a.q == b.q && a.r == b.r;
 }
+
+CUBE_COORD cube_substract(CUBE_COORD a, CUBE_COORD b) {
+  return (CUBE_COORD){a.q - b.q, a.r - b.r, a.s - b.s};
+}
+
+int cube_distance(CUBE_COORD a, CUBE_COORD b) {
+  CUBE_COORD vec = cube_substract(a, b);
+
+  return (abs(vec.q) + abs(vec.r) + abs(vec.s)) / 2;
+}

@@ -20,6 +20,10 @@ void handle_SDL_event(SDL_Event *event, STATE *state) {
     break;
   case SDL_MOUSEWHEEL:
     handle_mouse_whell_event(state->mouse, event->wheel);
+    break;
+  case SDL_KEYDOWN:
+    handle_keydown_event(state, event->key);
+    break;
   }
 }
 
@@ -29,7 +33,6 @@ void draw(STATE *state) {
   SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   int value = state->camera->z;
   draw_map_from_tile_list(value, 0, 0, state);
-  SDL_RenderPresent(state->renderer);
 }
 
 void game_loop(STATE *state) {
@@ -53,11 +56,14 @@ void game_loop(STATE *state) {
 
     // Draw //
     draw(state);
+    _print_debug_infos_on_screen(state);
+    SDL_RenderPresent(state->renderer);
   }
 }
 
 int main(int argc, char **argv) {
   STATE *state = init_state();
+
   game_loop(state);
   destroy_state(state);
   return 0;

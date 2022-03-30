@@ -2,10 +2,11 @@
 
 #include "SDL_stdinc.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 720
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include <math.h>
 #include <stdbool.h>
@@ -23,6 +24,8 @@ typedef enum E_HIGH_VIOLET_ERROR {
   HV_SDL_sytems_init_failure = 2,
   HV_SDL_rendererr_init_failure = 3,
   HV_SDL_mouse_trap_failed = 4,
+  HV_TTF_system_failed_init = 5,
+  HV_TTF_sans_font_load_failed = 6,
 } HIGHT_VIOLET_ERR_NO;
 
 typedef struct S_CUBE_COORD {
@@ -35,11 +38,15 @@ typedef struct S_AXIAL_COORD {
   int q;
   int r;
 } AXIAL_COORD;
+// coord/utils
 CUBE_COORD cube_round(double fract_q, double fract_r, double fract_s);
 AXIAL_COORD cube_to_axial(CUBE_COORD coord);
 CUBE_COORD axial_to_cube(AXIAL_COORD coord);
 AXIAL_COORD axial_round(double r, double q);
 bool axial_coord_equals(AXIAL_COORD a, AXIAL_COORD b);
+CUBE_COORD cube_substract(CUBE_COORD a, CUBE_COORD b);
+int cube_distance(CUBE_COORD a, CUBE_COORD b);
+
 typedef struct S_TILE {
   bool is_hovered;
   bool is_focused;
@@ -77,6 +84,7 @@ typedef struct S_MOUSE {
 // Memory
 MOUSE *new_mouse();
 void destroy_mouse();
+// input/mouse
 void handle_mouse_whell_event(MOUSE *mouse, SDL_MouseWheelEvent event);
 void handle_mouse_motion_event(MOUSE *mouse, SDL_MouseMotionEvent event);
 void handle_mouse_button_event(MOUSE *mouse, SDL_MouseButtonEvent event);
@@ -101,11 +109,18 @@ typedef struct S_STATE {
   SDL_Renderer *renderer;
   ENGINE_TIMERS *timers;
   MOUSE *mouse;
+  TILE *hover_reset_target;
+  TILE *focus_reset_target;
   bool is_still_running;
+  bool display_debug_values;
+  TTF_Font *font_sans;
 } STATE;
 // Memory
 STATE *init_state();
 void destroy_state(STATE *state);
+
+// input/keyboard
+void handle_keydown_event(STATE *state, SDL_KeyboardEvent event);
 
 // DRAW CALLS
 // hexagons
@@ -119,3 +134,6 @@ void draw_map_from_tile_list(int radius, int x, int y, STATE *state);
 void handle_input_mouse_tick(STATE *state);
 // camera
 void handle_camera_tick(STATE *state);
+
+// DEBUG
+void _print_debug_infos_on_screen(STATE *state);

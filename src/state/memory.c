@@ -13,6 +13,10 @@ void destroy_state(STATE *state) {
     SDL_DestroyWindow(state->window);
   if (state->camera)
     destroy_camera(state->camera);
+  if (state->font_sans)
+    TTF_CloseFont(state->font_sans);
+  if (TTF_WasInit())
+    TTF_Quit();
   SDL_Quit();
   free(state);
 }
@@ -55,16 +59,27 @@ SDL_Renderer *new_SDL_renderer(STATE *s) {
   return renderer;
 }
 
+void initialize_SDL_TTF(STATE *state) {
+  if (TTF_Init())
+    gracefully_exit_and_destroy_state(state, HV_TTF_system_failed_init);
+  state->font_sans = TTF_OpenFont("./fonts/OpenSans.ttf", 24);
+  if (state->font_sans == NULL)
+    gracefully_exit_and_destroy_state(state, HV_TTF_sans_font_load_failed);
+}
+
 STATE *new_state() {
   STATE *state = (STATE *)malloc(sizeof(STATE));
 
   state->window = NULL;
+  state->focus_reset_target = NULL;
   state->map = NULL;
   state->mouse = NULL;
   state->timers = NULL;
   state->renderer = NULL;
   state->is_still_running = false;
+  state->display_debug_values = false;
   state->camera = NULL;
+  state->hover_reset_target = NULL;
   return state;
 }
 
@@ -80,5 +95,6 @@ STATE *init_state() {
   // Initialize SDL systems
   state->window = new_SDL_window(state);
   state->renderer = new_SDL_renderer(state);
+  initialize_SDL_TTF(state);
   return state;
 }
