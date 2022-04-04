@@ -53,6 +53,19 @@ void game_loop(STATE *state) {
     // Logic //
     handle_camera_tick(state);
     handle_input_mouse_tick(state);
+    // If we got focuesed and hovered
+    if (state->focus_reset_target != NULL &&
+        state->hover_reset_target != NULL) {
+      TILE_COLLECTION collection = get_tile_line_from_extremities(
+          state->focus_reset_target, state->hover_reset_target, state);
+
+      for (int i = 0; i < collection.length; i++) {
+        print_cube_coord(collection.array[i].cube_coord);
+      }
+      if (collection.array)
+        free(collection.array);
+      putchar('\n');
+    }
 
     // Draw //
     draw(state);

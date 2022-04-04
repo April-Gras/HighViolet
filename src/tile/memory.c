@@ -9,11 +9,11 @@ TILE new_map_tile(int q, int r) {
 }
 
 TILE **new_map() {
-  int totla_member = R_LENGTH;
-  TILE **map = (TILE **)malloc(sizeof(TILE *) * (totla_member + 1));
+  int total_member_count = R_LENGTH;
+  TILE **map = (TILE **)malloc(sizeof(TILE *) * (total_member_count + 1));
   int r = 0;
 
-  while (r <= totla_member) {
+  while (r <= total_member_count) {
     int q = 0;
     int row_size = get_map_row_size(r);
 
@@ -33,10 +33,10 @@ int get_q_index_from_axial_coord(AXIAL_COORD coord) {
 }
 
 void destroy_tile_map(TILE **map) {
-  int totla_member = MAP_SIZE * 2;
+  int total_member_count = MAP_SIZE * 2;
   int r = 0;
 
-  while (r <= totla_member) {
+  while (r <= total_member_count) {
     free(map[r]);
     r++;
   }

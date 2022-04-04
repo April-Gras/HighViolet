@@ -32,6 +32,8 @@ add_executable(hv
   src/debug.c
   src/utils.c
     src/tile/memory.c
+    src/tile/list.c
+    src/tile/line.c
     src/tile/logic_tick_update.c
     src/state/memory.c
     src/engine_timers/memory.c
@@ -41,6 +43,7 @@ add_executable(hv
     src/camera/memory.c
     src/camera/manipulate.c
     src/coord/utils.c
+    src/coord/debug.c
     src/tick/camera.c
       src/tick/input/mouse.c
 )
