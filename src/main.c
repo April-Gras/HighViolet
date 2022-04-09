@@ -32,7 +32,7 @@ void draw(STATE *state) {
   SDL_RenderClear(state->renderer);
   SDL_SetRenderDrawColor(state->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
   int value = state->camera->z;
-  draw_map_from_tile_list(value, 0, 0, state);
+  draw_map_from_tile_list(value, state->camera->x, state->camera->y, state);
 }
 
 void game_loop(STATE *state) {
@@ -50,9 +50,12 @@ void game_loop(STATE *state) {
       handle_SDL_event(&event, state);
     }
 
-    // Logic //
-    handle_camera_tick(state);
+    // Input Logic
+    // handle_camera_tick(state);
     handle_input_mouse_tick(state);
+    handle_input_keyboard_tick(state);
+
+    // Internal Logic //
     // If we got focuesed and hovered
     if (state->focus_reset_target != NULL &&
         state->hover_reset_target != NULL) {
@@ -71,6 +74,7 @@ void game_loop(STATE *state) {
     draw(state);
     _print_debug_infos_on_screen(state);
     SDL_RenderPresent(state->renderer);
+    engine_timer_update(state->timers);
   }
 }
 

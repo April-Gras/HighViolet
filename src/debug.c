@@ -31,5 +31,7 @@ void print_hex_to_hex_path_debug_string(STATE *state) {
 }
 
 void _print_debug_infos_on_screen(STATE *state) {
+  if (!state->display_debug_values)
+    return;
   print_hex_to_hex_path_debug_string(state);
 }

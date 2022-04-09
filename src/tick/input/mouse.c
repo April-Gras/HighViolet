@@ -29,8 +29,8 @@ void handle_focus_tick(TILE *target_tile, STATE *state) {
 }
 
 void handle_input_mouse_tick(STATE *state) {
-  AXIAL_COORD potencial_hex_hover =
-      mouse_to_hexa_axial_coord(state->mouse, (double)state->camera->z);
+  AXIAL_COORD potencial_hex_hover = mouse_to_hexa_axial_coord(
+      state->mouse, state->camera, (double)state->camera->z);
 
   reset_last_hover_target(state);
 

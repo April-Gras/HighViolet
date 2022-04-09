@@ -37,6 +37,7 @@ add_executable(hv
     src/tile/logic_tick_update.c
     src/state/memory.c
     src/engine_timers/memory.c
+    src/engine_timers/manipulation.c
     src/input/mouse.c
     src/input/keyboard.c
     src/draw/hexagon.c
@@ -46,5 +47,6 @@ add_executable(hv
     src/coord/debug.c
     src/tick/camera.c
       src/tick/input/mouse.c
+      src/tick/input/keyboard.c
 )
 target_link_libraries(hv ${SDL2_LIBRARIES} ${SDL2TTF_LIBRARY} m)

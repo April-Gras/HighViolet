@@ -58,9 +58,10 @@ typedef struct S_TILE_COLLECTION {
 } TILE_COLLECTION;
 
 typedef struct S_ENGINE_TIMERS {
-  int last_frame_time_stamp;
-  int new_frame_time_stamp;
-  int ellapsed_milliseconds;
+  Uint32 last_frame_time_stamp;
+  Uint32 new_frame_time_stamp;
+  Uint32 ellapsed_milliseconds;
+  Uint32 target_frames_per_seconds;
 } ENGINE_TIMERS;
 
 typedef struct S_MOUSE {
@@ -127,6 +128,8 @@ TILE_COLLECTION get_tile_line_from_extremities(TILE *a, TILE *b, STATE *state);
 // engine_timers/memory
 ENGINE_TIMERS *new_engine_timers();
 void destroy_engine_timers(ENGINE_TIMERS *timers);
+// engine_timers/manimulation
+void engine_timer_update(ENGINE_TIMERS *timers);
 
 // mouse/memory
 MOUSE *new_mouse();
@@ -135,10 +138,12 @@ void destroy_mouse();
 void handle_mouse_whell_event(MOUSE *mouse, SDL_MouseWheelEvent event);
 void handle_mouse_motion_event(MOUSE *mouse, SDL_MouseMotionEvent event);
 void handle_mouse_button_event(MOUSE *mouse, SDL_MouseButtonEvent event);
-AXIAL_COORD mouse_to_hexa_axial_coord(MOUSE *mouse, double radius);
+AXIAL_COORD mouse_to_hexa_axial_coord(MOUSE *mouse, CAMERA *camera_offset,
+                                      double radius);
 
 // state/memory
 STATE *init_state();
+void gracefully_exit_and_destroy_state(STATE *state, int error_number);
 void destroy_state(STATE *state);
 
 // input/keyboard
@@ -154,6 +159,8 @@ void draw_map_from_tile_list(int radius, int x, int y, STATE *state);
 // TICK CALLS
 // input/mouse
 void handle_input_mouse_tick(STATE *state);
+// input/keyboard
+void handle_input_keyboard_tick(STATE *state);
 // camera
 void handle_camera_tick(STATE *state);
 
